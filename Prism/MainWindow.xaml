@@ -205,11 +205,11 @@
                 <Separator Background="#333333"/>
                 <MenuItem Header="Esci"                InputGestureText="Alt+F4" Style="{StaticResource MenuItemStyle}"/>
             </MenuItem>
-            <MenuItem Header="Modifica" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Annulla"             InputGestureText="Ctrl+Z" Style="{StaticResource MenuItemStyle}"/>
-                <MenuItem Header="Ripristina"          InputGestureText="Ctrl+Y" Style="{StaticResource MenuItemStyle}"/>
+            <MenuItem Header="Edit" Style="{StaticResource MenuItemStyle}">
+                <MenuItem Header="Undo"             InputGestureText="Ctrl+Z" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Redo"          InputGestureText="Ctrl+Y" Style="{StaticResource MenuItemStyle}"/>
                 <Separator Background="#333333"/>
-                <MenuItem Header="Reimposta tutto"     Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Reset All"     Style="{StaticResource MenuItemStyle}"/>
             </MenuItem>
             <MenuItem Header="Image" Style="{StaticResource MenuItemStyle}">
                 <MenuItem Header="Levels" Click="onLevelsClick"             InputGestureText="Ctrl+Alt+L" Style="{StaticResource MenuItemStyle}"/>
@@ -236,14 +236,16 @@
         <Border Grid.Row="1" Grid.ColumnSpan="4" Background="#1E1E1E" BorderBrush="#2A2A2A" BorderThickness="0,1,0,1">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
 
-                <Button Style="{StaticResource ToolbarButtonStyle}" Click="onImageAlign">
+                <Button Style="{StaticResource ToolbarButtonStyle}" 
+            Width="28" Height="28" Padding="0"
+            Click="onImageAlign">
                     <Image Source="Icons/img-align.png" Width="16" Height="16"/>
                 </Button>
                 <Separator Width="1" Background="#333333" Margin="4,6"/>
-                <Button Style="{StaticResource ToolbarButtonStyle}">
+                <Button Style="{StaticResource ToolbarButtonStyle}"
+            Width="28" Height="28" Padding="0">
                     <Image Source="Icons/img-crop.png" Width="16" Height="16"/>
                 </Button>
-
 
             </StackPanel>
         </Border>
