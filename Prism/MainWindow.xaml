@@ -224,8 +224,8 @@
                 <MenuItem Header="Carica LUT .cube..."  Style="{StaticResource MenuItemStyle}"/>
                 <MenuItem Header="Rimuovi LUT"          Style="{StaticResource MenuItemStyle}"/>
             </MenuItem>
-            <MenuItem Header="?" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Informations" Style="{StaticResource MenuItemStyle}"/>
+            <MenuItem Header="Aiuto" Style="{StaticResource MenuItemStyle}">
+                <MenuItem Header="Informazioni su Wakame Studio" Style="{StaticResource MenuItemStyle}"/>
             </MenuItem>
         </Menu>
 
