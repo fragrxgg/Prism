@@ -38,6 +38,23 @@ namespace histmaker
             return hist;
         }
 
+        public static int[][] ComputeHistogramFromPixels(byte[] pixels)
+        {
+            int[][] hist = new int[3][];
+            hist[0] = new int[256];
+            hist[1] = new int[256];
+            hist[2] = new int[256];
+
+            for (int i = 0; i < pixels.Length; i += 3)
+            {
+                hist[0][pixels[i]]++;
+                hist[1][pixels[i + 1]]++;
+                hist[2][pixels[i + 2]]++;
+            }
+
+            return hist;
+        }
+
         public static Canvas DrawHistogram(int[][] hist, Canvas canvas)
         {
             canvas.Children.Clear();

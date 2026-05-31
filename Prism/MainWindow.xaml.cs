@@ -354,27 +354,39 @@ namespace Prism
 
         private async void drawHistogram(BitmapSource img)
         {
-            int[][] hist = await Task.Run(() =>
-            {
-                return HistogramMaker.ComputeHistogram(img);
-            });
+            // Extract pixels on the UI thread (where img is accessible)
+            int width = img.PixelWidth;
+            int height = img.PixelHeight;
+            int stride = width * 3;
+            byte[] pixels = new byte[stride * height];
 
+            var converted = new FormatConvertedBitmap(img, PixelFormats.Rgb24, null, 0);
+            converted.CopyPixels(pixels, stride, 0);
+
+            // Calculate histogram on background thread (only byte array, no WPF objects)
+            int[][] hist = await Task.Run(() => HistogramMaker.ComputeHistogramFromPixels(pixels));
+
+            // Draw on UI Thread
             HistogramMaker.DrawHistogram(hist, HistogramCanvas);
         }
 
         private void onExportClick(object sender, RoutedEventArgs e)
         {
+
             ExportJPG exportWindow = new ExportJPG();
             exportWindow.ShowDialog();
-            return;
 
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "JPEG Image|*.jpg|PNG Image|*.png|TIFF Image|*.tiff";
+            int quality = exportWindow.quality;
+            int dpi = exportWindow.dpi;
+            string exportFolder = exportWindow.exportFolder;
 
-            if (saveFileDialog.ShowDialog() == true)
+            if (!string.IsNullOrEmpty(exportFolder))
             {
-                RawLab.Export(saveFileDialog.FileName, 100, 96);
+                Mouse.OverrideCursor = Cursors.Wait;
+                RawLab.Export(exportFolder, quality, dpi);
+                Mouse.OverrideCursor = null;
             }
+
         }
 
         private async void onLevelsClick(object sender, RoutedEventArgs e)
@@ -440,6 +452,130 @@ namespace Prism
         {
             RawLab.setAutoWB(false);
             TempSlider.IsEnabled = true;
+        }
+
+        private void onResizingClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+        /** Cropping*/
+
+        private void onCropImg(object sender, RoutedEventArgs e)
+        {
+            _cropMode = !_cropMode;
+            CropCanvas.Visibility = _cropMode ? Visibility.Visible : Visibility.Collapsed;
+            ImageScrollViewer.Cursor = _cropMode ? Cursors.Cross : Cursors.Arrow;
+        }
+
+
+
+        private bool _isCropping = false;
+        private bool _cropMode = false;
+        private System.Windows.Point _cropStart;
+        private System.Windows.Shapes.Rectangle _cropRect;
+
+
+        private void CropCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!_cropMode) return;
+            _isCropping = true;
+            _cropStart = e.GetPosition(CropCanvas);
+
+            if (_cropRect != null) CropCanvas.Children.Remove(_cropRect);
+
+            _cropRect = new System.Windows.Shapes.Rectangle
+            {
+                Stroke = System.Windows.Media.Brushes.White,
+                StrokeThickness = 1.5,
+                StrokeDashArray = new DoubleCollection { 4, 2 },
+                Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(40, 255, 255, 255))
+            };
+
+            Canvas.SetLeft(_cropRect, _cropStart.X);
+            Canvas.SetTop(_cropRect, _cropStart.Y);
+            CropCanvas.Children.Add(_cropRect);
+            CropCanvas.CaptureMouse();
+        }
+
+        private void CropCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!_isCropping || _cropRect == null) return;
+
+            var pos = e.GetPosition(CropCanvas);
+            double x = Math.Min(pos.X, _cropStart.X);
+            double y = Math.Min(pos.Y, _cropStart.Y);
+            double w = Math.Abs(pos.X - _cropStart.X);
+            double h = Math.Abs(pos.Y - _cropStart.Y);
+
+            Canvas.SetLeft(_cropRect, x);
+            Canvas.SetTop(_cropRect, y);
+            _cropRect.Width = w;
+            _cropRect.Height = h;
+
+            // Calculate real crop size in pixels based on the current zoom level and image size
+            var src = PreviewImage.Source as BitmapSource;
+            if (src != null && w > 0 && h > 0)
+            {
+                double scaleX = src.PixelWidth / (PreviewImage.ActualWidth * ImageScale.ScaleX);
+                double scaleY = src.PixelHeight / (PreviewImage.ActualHeight * ImageScale.ScaleY);
+
+                int cropW = (int)(w * scaleX);
+                int cropH = (int)(h * scaleY);
+
+                CropToastText.Text = $"{cropW} × {cropH}  ({src.PixelWidth} × {src.PixelHeight})";
+
+                // Position the toast near the cursor, but with a small offset
+                Canvas.SetLeft(CropToast, pos.X + 14);
+                Canvas.SetTop(CropToast, pos.Y + 14);
+
+                CropToast.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void CropCanvas_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (!_isCropping) return;
+            _isCropping = false;
+            CropCanvas.ReleaseMouseCapture();
+            ApplyCrop();
+            CropToast.Visibility = Visibility.Collapsed;
+        }
+
+        private void ApplyCrop()
+        {
+            if (_cropRect == null || _cropRect.Width < 5 || _cropRect.Height < 5) return;
+
+            var src = PreviewImage.Source as BitmapSource;
+            if (src == null) return;
+
+            // Canvas's coordinates correspond to the scaled image, so we need to convert them back to real pixels
+            // We have to consider both the zoom level and the actual size of the image in the UI
+
+            double scaleX = src.PixelWidth / (PreviewImage.ActualWidth * ImageScale.ScaleX);
+            double scaleY = src.PixelHeight / (PreviewImage.ActualHeight * ImageScale.ScaleY);
+
+            int px = (int)(Canvas.GetLeft(_cropRect) * scaleX);
+            int py = (int)(Canvas.GetTop(_cropRect) * scaleY);
+            int pw = (int)(_cropRect.Width * scaleX);
+            int ph = (int)(_cropRect.Height * scaleY);
+
+            px = Math.Clamp(px, 0, src.PixelWidth - 1);
+            py = Math.Clamp(py, 0, src.PixelHeight - 1);
+            pw = Math.Clamp(pw, 1, src.PixelWidth - px);
+            ph = Math.Clamp(ph, 1, src.PixelHeight - py);
+
+            var cropped = new CroppedBitmap(src, new Int32Rect(px, py, pw, ph));
+            PreviewImage.Source = cropped;
+            drawHistogram(cropped);
+
+            // Reset
+            CropCanvas.Children.Remove(_cropRect);
+            _cropRect = null;
+            _cropMode = false;
+            CropCanvas.Visibility = Visibility.Collapsed;
+            ImageScrollViewer.Cursor = Cursors.Arrow;
         }
 
         /** Manage Metadata files saving **/

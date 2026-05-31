@@ -13,6 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="export0.png" />
+    <None Remove="file-export.png" />
     <None Remove="Fonts\SourceSans3-Regular.ttf" />
     <None Remove="icons8-apertura-32.png" />
     <None Remove="Icons\img-align.png" />
@@ -35,6 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="export0.png" />
+    <Resource Include="file-export.png" />
     <Resource Include="Icons\wb-auto-mini.png" />
   </ItemGroup>
 
