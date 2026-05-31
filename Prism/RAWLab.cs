@@ -20,6 +20,7 @@ namespace Prism
         private int _cachedWidth;
         private int _cachedHeight;
 
+
         // Combined LUT exposure+levels, invalidated when parameters change
         private byte[] _combinedLut = null;
         private bool _lutDirty = true;
