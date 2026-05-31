@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="cubelab/cubelab.csproj" Id="eac6c4cb-5c08-4706-9e37-755f045e4788" />
+  <Project Path="histmaker/histmaker.csproj" Id="037a913f-d95e-4514-8ddd-5516e464e72e" />
+  <Project Path="Prism/Prism.csproj" />
+</Solution>
