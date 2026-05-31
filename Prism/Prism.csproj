@@ -13,6 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="chain.png" />
+    <None Remove="chain1.png" />
     <None Remove="export0.png" />
     <None Remove="file-export.png" />
     <None Remove="Fonts\SourceSans3-Regular.ttf" />
@@ -25,6 +27,7 @@
     <None Remove="Icons\wb-camera.png" />
     <None Remove="img-align.png" />
     <None Remove="SplashScreen1.png" />
+    <None Remove="unchain.png" />
     <None Remove="wb-camera.png" />
   </ItemGroup>
 
@@ -37,6 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="chain.png" />
+    <Resource Include="chain1.png" />
     <Resource Include="export0.png" />
     <Resource Include="file-export.png" />
     <Resource Include="Icons\wb-auto-mini.png" />
@@ -61,6 +66,7 @@
     <Resource Include="Icons\wb-camera-mini.png" />
     <Resource Include="Icons\wb-camera.png" />
     <Resource Include="img-align.png" />
+    <Resource Include="unchain.png" />
     <Resource Include="Wakame.xaml" />
     <Resource Include="wb-camera.png" />
   </ItemGroup>
