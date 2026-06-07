@@ -7,17 +7,18 @@
     <!-- =========================
          FONT FAMILY
     ========================== -->
-    <FontFamily x:Key="Lab.Font.Primary">/Fonts/SourceSans3-Regular.ttf#Source3</FontFamily>
+    <FontFamily x:Key="Lab.Font.Primary">/Fonts/Satoshi-Regular.otf#Satoshi</FontFamily>
     <FontFamily x:Key="Lab.Font.Fallback">Tahoma</FontFamily>
-    <FontFamily x:Key="Lab.Font.Code">/Fonts/SourceSans3-Regular.ttf#Source3</FontFamily>
+    <FontFamily x:Key="Lab.Font.Code">/Fonts/RedditSansCondensed-Regular.ttf#Reddit Sans Condensed</FontFamily>
+    <FontFamily x:Key="Lab.Font.Condensed">/Fonts/RedditSansCondensed-Regular.ttf#Reddit Sans Condensed</FontFamily>
     <sys:Double x:Key="MahApps.Font.Size.Window.Title">12</sys:Double>
 
     <!-- =========================
          DIMENSIONI & FONT
     ========================== -->
     <sys:Double x:Key="Lab.FontSize.Normal">12</sys:Double>
-    <sys:Double x:Key="Lab.FontSize.Small">11</sys:Double>
-    <sys:Double x:Key="Lab.FontSize.Large">14</sys:Double>
+    <sys:Double x:Key="Lab.FontSize.Small">12</sys:Double>
+    <sys:Double x:Key="Lab.FontSize.Large">16</sys:Double>
     <sys:Double x:Key="Lab.Size.SliderHeight">20</sys:Double>
     <sys:Double x:Key="Lab.Size.MenuHeight">28</sys:Double>
     <sys:Double x:Key="Lab.Size.ButtonHeight">26</sys:Double>
@@ -45,9 +46,9 @@
     <Color x:Key="Lab.Color.TextDisabled">#FF4A4A4A</Color>
 
     <!-- Accent (arancione Lab) -->
-    <Color x:Key="Lab.Color.Accent">#FFFF764D</Color>
-    <Color x:Key="Lab.Color.AccentHover">#FFFF8C66</Color>
-    <Color x:Key="Lab.Color.AccentPressed">#FFFF6033</Color>
+    <Color x:Key="Lab.Color.Accent">#2c3e50</Color>
+    <Color x:Key="Lab.Color.AccentHover">#34495e</Color>
+    <Color x:Key="Lab.Color.AccentPressed">#2c3e50</Color>
 
     <!-- Stati interattivi -->
     <Color x:Key="Lab.Color.Hover">#FF2F2F2F</Color>

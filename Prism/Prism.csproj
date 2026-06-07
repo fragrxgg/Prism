@@ -17,6 +17,9 @@
     <None Remove="chain1.png" />
     <None Remove="export0.png" />
     <None Remove="file-export.png" />
+    <None Remove="Fonts\Antonio.ttf" />
+    <None Remove="Fonts\RedditSansCondensed-Regular.ttf" />
+    <None Remove="Fonts\Satoshi-Regular.otf" />
     <None Remove="Fonts\SourceSans3-Regular.ttf" />
     <None Remove="icons8-apertura-32.png" />
     <None Remove="Icons\img-align.png" />
@@ -44,6 +47,9 @@
     <Resource Include="chain1.png" />
     <Resource Include="export0.png" />
     <Resource Include="file-export.png" />
+    <Resource Include="Fonts\Antonio.ttf" />
+    <Resource Include="Fonts\RedditSansCondensed-Regular.ttf" />
+    <Resource Include="Fonts\Satoshi-Regular.otf" />
     <Resource Include="Icons\wb-auto-mini.png" />
   </ItemGroup>
 
@@ -59,7 +65,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Fonts\SourceSans3-Regular.ttf" />
     <Resource Include="Icons\img-align.png" />
     <Resource Include="Icons\img-crop.png" />
     <Resource Include="Icons\wb-auto.png" />

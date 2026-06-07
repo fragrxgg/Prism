@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Prism.MainWindow"
-        Title="Prism"
+        Title="Prism Studio"
+        FontFamily="{DynamicResource Lab.Font.Primary}"
         Height="850" Width="1280"
         MinHeight="600" MinWidth="900"
         WindowStartupLocation="CenterScreen"
@@ -65,7 +66,7 @@
         <Style x:Key="MenuBarStyle" TargetType="{x:Type Menu}">
             <Setter Property="Background"   Value="{StaticResource Brush.PanelRaised}"/>
             <Setter Property="Foreground"   Value="{StaticResource Brush.Text}"/>
-            <Setter Property="FontFamily"   Value="Geneva, Segoe UI, Arial"/>
+            <Setter Property="FontFamily"       Value="{DynamicResource Lab.Font.Primary}"/>
             <Setter Property="FontSize"     Value="12"/>
             <Setter Property="Height"       Value="24"/>
             <Setter Property="Padding"      Value="4,0"/>
@@ -78,7 +79,7 @@
             <Setter Property="Background"       Value="Transparent"/>
             <Setter Property="Padding"          Value="10,3"/>
             <Setter Property="BorderThickness"  Value="0"/>
-            <Setter Property="FontFamily"       Value="Geneva, Segoe UI, Arial"/>
+            <Setter Property="FontFamily"       Value="{DynamicResource Lab.Font.Primary}"/>
             <Setter Property="FontSize"         Value="12"/>
 
             <Style.Triggers>
@@ -97,7 +98,7 @@
             <Setter Property="BorderThickness"  Value="1"/>
             <Setter Property="BorderBrush"      Value="{StaticResource Brush.ShadowLight}"/>
             <Setter Property="Padding"          Value="10,3"/>
-            <Setter Property="FontFamily"       Value="Geneva, Segoe UI, Arial"/>
+            <Setter Property="FontFamily"       Value="{DynamicResource Lab.Font.Primary}"/>
             <Setter Property="FontSize"         Value="11"/>
             <Setter Property="Height"           Value="22"/>
             <Setter Property="Cursor"           Value="Hand"/>
@@ -121,7 +122,7 @@
             <Setter Property="BorderThickness"  Value="1"/>
             <Setter Property="BorderBrush"      Value="{StaticResource Brush.ShadowLight}"/>
             <Setter Property="Padding"          Value="3"/>
-            <Setter Property="FontFamily"       Value="Geneva, Segoe UI, Arial"/>
+            <Setter Property="FontFamily"       Value="{DynamicResource Lab.Font.Primary}"/>
             <Setter Property="FontSize"         Value="11"/>
             <Setter Property="Height"           Value="22"/>
             <Setter Property="Cursor"           Value="Hand"/>
@@ -152,7 +153,7 @@
         <!-- ══════════════════════════════════════════ -->
         <Style x:Key="SidebarLabel" TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground"   Value="{StaticResource Brush.Accent}"/>
-            <Setter Property="FontFamily"   Value="Geneva, Segoe UI, Arial"/>
+            <Setter Property="FontFamily"       Value="{DynamicResource Lab.Font.Primary}"/>
             <Setter Property="FontSize"     Value="10"/>
             <Setter Property="FontWeight"   Value="Bold"/>
             <Setter Property="Margin"       Value="0,10,0,4"/>
@@ -160,7 +161,7 @@
 
         <Style x:Key="SliderValue" TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground"       Value="{StaticResource Brush.Accent}"/>
-            <Setter Property="FontFamily"       Value="Monaco, Consolas"/>
+            <Setter Property="FontFamily"       Value="{DynamicResource Lab.Font.Primary}"/>
             <Setter Property="FontSize"         Value="11"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="MinWidth"         Value="36"/>
@@ -174,7 +175,7 @@
 
         <Style x:Key="SectionTitle" TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground"       Value="{StaticResource Brush.AccentSoft}"/>
-            <Setter Property="FontFamily"       Value="Geneva, Segoe UI, Arial"/>
+            <Setter Property="FontFamily"       Value="{DynamicResource Lab.Font.Primary}"/>
             <Setter Property="FontSize"         Value="11"/>
             <Setter Property="FontWeight"       Value="Bold"/>
             <Setter Property="Margin"           Value="0,14,0,6"/>
@@ -208,10 +209,10 @@
                 <MenuItem Header="Open JPEG" Click="onJPGOpen" />
                 <MenuItem Header="Import RAW..."         InputGestureText="Ctrl+O" Click="onRAWOpen"/>
                 <Separator Background="#333333"/>
-                <MenuItem Header="Salva..."           InputGestureText="Ctrl+S"/>
+                <MenuItem Header="Save..." InputGestureText="Ctrl+S"/>
                 <MenuItem Header="Export Image..." Click="onExportClick"     InputGestureText="Ctrl+Shift+E" Style="{StaticResource MenuItemStyle}"/>
                 <Separator Background="#333333"/>
-                <MenuItem Header="Esci"                InputGestureText="Alt+F4" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Exit Application" Click="onCloseApp"                InputGestureText="Alt+F4" Style="{StaticResource MenuItemStyle}"/>
             </MenuItem>
             <MenuItem Header="Edit" Style="{StaticResource MenuItemStyle}">
                 <MenuItem Header="Undo"             InputGestureText="Ctrl+Z" Style="{StaticResource MenuItemStyle}"/>
@@ -230,12 +231,12 @@
                 <Separator Background="#333333"/>
                 <MenuItem Header="Histogram" Click="onHistogramOpen"   IsCheckable="True" IsChecked="True" Style="{StaticResource MenuItemStyle}"/>
             </MenuItem>
-            <MenuItem Header="LUT" Style="{StaticResource MenuItemStyle}">
+            <!-- <MenuItem Header="LUT" Style="{StaticResource MenuItemStyle}">
                 <MenuItem Header="Carica LUT .cube..."  Style="{StaticResource MenuItemStyle}"/>
                 <MenuItem Header="Rimuovi LUT"          Style="{StaticResource MenuItemStyle}"/>
-            </MenuItem>
-            <MenuItem Header="Aiuto" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Informazioni su Wakame Studio" Style="{StaticResource MenuItemStyle}"/>
+            </MenuItem> -->
+            <MenuItem Header="?" Style="{StaticResource MenuItemStyle}">
+                <MenuItem Header="About Prism Studio" Style="{StaticResource MenuItemStyle}"/>
             </MenuItem>
         </Menu>
 
@@ -392,7 +393,7 @@
                             </Grid.ColumnDefinitions>
                             <Slider x:Name="ContrastSlider" Grid.Column="0"
                                     Minimum="-100" Maximum="100" Value="0"
-                                    Style="{StaticResource SliderStyle}"/>
+                                    Style="{StaticResource SliderStyle}" ValueChanged="ContrastSlider_ValueChanged"/>
                             <TextBlock Grid.Column="1" Style="{StaticResource SliderValue}"
                                        Text="{Binding Value, ElementName=ContrastSlider, StringFormat=\{0:F0\}}"/>
                         </Grid>
@@ -406,7 +407,7 @@
                             </Grid.ColumnDefinitions>
                             <Slider x:Name="HighlightsSlider" Grid.Column="0"
                                     Minimum="-100" Maximum="100" Value="0"
-                                    Style="{StaticResource SliderStyle}"/>
+                                    Style="{StaticResource SliderStyle}" ValueChanged="HighlightsSlider_ValueChanged"/>
                             <TextBlock Grid.Column="1" Style="{StaticResource SliderValue}"
                                        Text="{Binding Value, ElementName=HighlightsSlider, StringFormat=\{0:F0\}}"/>
                         </Grid>
@@ -420,7 +421,7 @@
                             </Grid.ColumnDefinitions>
                             <Slider x:Name="ShadowsSlider" Grid.Column="0"
                                     Minimum="-100" Maximum="100" Value="0"
-                                    Style="{StaticResource SliderStyle}"/>
+                                    Style="{StaticResource SliderStyle}" ValueChanged="ShadowsSlider_ValueChanged"/>
                             <TextBlock Grid.Column="1" Style="{StaticResource SliderValue}"
                                        Text="{Binding Value, ElementName=ShadowsSlider, StringFormat=\{0:F0\}}"/>
                         </Grid>

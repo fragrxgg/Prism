@@ -27,9 +27,8 @@
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock
                        Foreground="#888888"
-                       FontSize="12"
+                       FontSize="{DynamicResource Lab.FontSize.Large}"
                        ><Run Language="it-it" Text="RAW File Elaborating" FontSize="10"/></TextBlock>
-            <ProgressBar Height="10" Width="100" IsIndeterminate="True"/>
         </StackPanel>
     </Border>
 </Window>

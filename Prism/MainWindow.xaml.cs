@@ -242,8 +242,8 @@ namespace Prism
                     MessageBox.Show(e.Message);
                 }
                     BitmapSource bmp = RawLab.GetPreviewBitmap();
-                    bmp.Freeze(); // obbligatorio per passare la bitmap a un altro thread
-                    return bmp;
+                    bmp.Freeze(); // needed because we are passing it to the UI thread
+                return bmp;
             });
 
             PreviewImage.Source = bitmap;
@@ -252,6 +252,9 @@ namespace Prism
         }
 
         private CancellationTokenSource _exposureCts;
+        private CancellationTokenSource _contrastCts;
+        private CancellationTokenSource _highLightsCts;
+        private CancellationTokenSource _shadowsCts;
 
         private async void ExposureSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -267,16 +270,91 @@ namespace Prism
 
                 RawLab.SetExposure((float)-e.NewValue);
 
-                // Chiama GetPreviewBitmap() UNA sola volta
-                var bitmap = RawLab.GetPreviewBitmap();
-                PreviewImage.Source = bitmap;
-                drawHistogram(bitmap);
+                // Call only once GetPreviewBitmap() after the user stops moving the slider
+                refreshBitmap();
             }
             catch (TaskCanceledException)
             {
-                // Normale: lo slider è stato mosso di nuovo, ignora
+                // Don't do anything, it's normal: the slider was moved again, ignore this update
             }
         }
+
+        private async void ContrastSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _contrastCts?.Cancel();
+            _contrastCts = new CancellationTokenSource();
+            var token = _contrastCts.Token;
+
+            try
+            {
+                await Task.Delay(150, token);
+
+                if (token.IsCancellationRequested) return;
+
+                RawLab.SetContrast((float)-e.NewValue);
+
+                // Chiama GetPreviewBitmap() UNA sola volta
+                refreshBitmap();
+            }
+            catch (TaskCanceledException)
+            {
+                // Don't do anything, it's normal: the slider was moved again, ignore this update
+            }
+        }
+
+        private async void HighlightsSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _highLightsCts?.Cancel();
+            _highLightsCts = new CancellationTokenSource();
+            var token = _highLightsCts.Token;
+
+            try
+            {
+                await Task.Delay(150, token);
+
+                if (token.IsCancellationRequested) return;
+
+                RawLab.SetLights((float)-e.NewValue);
+
+                // Only once GetPreviewBitmap() after the user stops moving the slider
+                refreshBitmap();
+            }
+            catch (TaskCanceledException)
+            {
+                // Don't do anything, it's normal: the slider was moved again, ignore this update
+            }
+        }
+
+        private async void ShadowsSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _shadowsCts?.Cancel();
+            _shadowsCts = new CancellationTokenSource();
+            var token = _shadowsCts.Token;
+
+            try
+            {
+                await Task.Delay(150, token);
+
+                if (token.IsCancellationRequested) return;
+
+                RawLab.SetShadows((float)-e.NewValue);
+
+                // Only once GetPreviewBitmap() after the user stops moving the slider
+                refreshBitmap();
+            }
+            catch (TaskCanceledException)
+            {
+                // Don't do anything, it's normal: the slider was moved again, ignore this update
+            }
+        }
+
+        private void refreshBitmap()
+        {
+            var bitmap = RawLab.GetPreviewBitmap();
+            PreviewImage.Source = bitmap;
+            drawHistogram(bitmap);
+        }
+
 
         private void onHistogramOpen(object sender, RoutedEventArgs e)
         {
@@ -296,8 +374,9 @@ namespace Prism
 
         private void onImageAlign(object sender, RoutedEventArgs e)
         {
-            RawLab.RotateBitmapSafe(RawLab.GetPreviewBitmap(), 30);
-            PreviewImage.Source = RawLab.GetPreviewBitmap();
+            ImgAlign imgAlignFrm = new ImgAlign();
+            imgAlignFrm.Owner = this;
+            imgAlignFrm.ShowDialog();
         }
 
         private CancellationTokenSource _cts;
@@ -577,6 +656,13 @@ namespace Prism
             CropCanvas.Visibility = Visibility.Collapsed;
             ImageScrollViewer.Cursor = Cursors.Arrow;
         }
+
+        private void onCloseApp(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+
 
         /** Manage Metadata files saving **/
 
